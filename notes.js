@@ -11,6 +11,7 @@ const options = {
   },
   auth: {
     type: 'string',
+    default: process.env.RELEASE_NOTES_TOKEN || process.env.GITHUB_TOKEN,
     short: 'a'
   },
   repo: {

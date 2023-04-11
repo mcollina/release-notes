@@ -7,11 +7,13 @@ import { readFile } from 'node:fs/promises'
 
 let defaultOwner = ''
 let defaultRepo = ''
+let defaultVersion = ''
 try {
   // read package.json
   const pkg = JSON.parse(await readFile('package.json', 'utf8'))
   defaultOwner = pkg.repository?.url?.split(':')[1]?.split('/')[0]
   defaultRepo = pkg.repository?.url?.split(':')[1]?.split('/')[1]?.replace(/\.git$/, '')
+  defaultVersion = pkg.version
 } catch {}
 
 const options = {
@@ -32,6 +34,7 @@ const options = {
   },
   tag_name: {
     type: 'string',
+    default: defaultVersion,
     short: 't'
   },
   target_commitish: {

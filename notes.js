@@ -27,7 +27,7 @@ const options = {
   },
   auth: {
     type: 'string',
-    default: process.env.RELEASE_NOTES_TOKEN || process.env.GITHUB_TOKEN,
+      default: process.env.RELEASE_NOTES_TOKEN || process.env.GITHUB_TOKEN,
     short: 'a'
   },
   repo: {
@@ -44,11 +44,16 @@ const options = {
     type: 'string',
     short: 'c',
     default: 'main'
+  },
+  verbose: {
+    type: 'boolean',
+    short: 'v',
+    default: false
   }
 }
 
 const {
-  values: { owner, auth, repo, tag_name, target_commitish }
+  values: { owner, auth, repo, tag_name, target_commitish, verbose }
 } = parseArgs({ options, strict: true })
 
 if (!owner) {
@@ -67,7 +72,9 @@ if (!tag_name) {
   throw new Error('tag_name is required')
 }
 
-console.log('Creating release', tag_name, 'for', owner, repo)
+if (verbose) {
+  console.log('Creating release', tag_name, 'for', owner, repo)
+}
 
 const octokit = new Octokit({ auth })
 
@@ -105,5 +112,8 @@ const { data: { html_url } } = await octokit.request('POST /repos/{owner}/{repo}
   }
 })
 
-console.log('Release created at', html_url)
-// console.log(JSON.stringify(res, null, 2))
+if (verbose) {
+  console.log('Release created at', html_url)
+} else {
+  console.log(html_url)
+}

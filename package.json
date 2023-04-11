@@ -1,0 +1,23 @@
+{
+  "name": "@matteo.collina/release-notes",
+  "version": "0.0.1",
+  "description": "How I create release notes for my npm modules",
+  "main": "notes.js",
+  "type": "module",
+  "bin": {
+    "release-notes": "notes.js"
+  },
+  "scripts": {
+    "test": "standard"
+  },
+  "author": "Matteo Collina <hello@matteocollina.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mcollina/release-notes.git"
+  },
+  "homepage": "https://github.com/mcollina/release-notes#readme",
+  "license": "MIT",
+  "dependencies": {
+    "@octokit/core": "^4.2.0"
+  }
+}

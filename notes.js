@@ -1,12 +1,23 @@
 #!/usr/bin/env node
 import { Octokit } from '@octokit/core'
 import { parseArgs } from 'node:util'
+import { readFile } from 'node:fs/promises'
 
 /* eslint camelcase:off */
+
+let defaultOwner = ''
+let defaultRepo = ''
+try {
+  // read package.json
+  const pkg = JSON.parse(await readFile('package.json', 'utf8'))
+  defaultOwner = pkg.repository?.url?.split(':')[1]?.split('/')[0]
+  defaultRepo = pkg.repository?.url?.split(':')[1]?.split('/')[1]?.replace(/\.git$/, '')
+} catch {}
 
 const options = {
   owner: {
     type: 'string',
+    default: defaultOwner,
     short: 'o'
   },
   auth: {
@@ -15,6 +26,7 @@ const options = {
     short: 'a'
   },
   repo: {
+    default: defaultRepo,
     type: 'string',
     short: 'r'
   },

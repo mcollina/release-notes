@@ -11,8 +11,11 @@ let defaultVersion = ''
 try {
   // read package.json
   const pkg = JSON.parse(await readFile('package.json', 'utf8'))
-  defaultOwner = pkg.repository?.url?.split(':')[1]?.split('/')[0]
-  defaultRepo = pkg.repository?.url?.split(':')[1]?.split('/')[1]?.replace(/\.git$/, '')
+  /* regexp to extract owner and repo from github url */
+  const regexp = /github\.com\/([^/]+)\/([^/.]+)(\.git)?/
+  const [base, owner, repo] = regexp.exec(pkg.repository.url)
+  defaultOwner = owner
+  defaultRepo = repo
   defaultVersion = pkg.version
 } catch {}
 
@@ -47,6 +50,24 @@ const options = {
 const {
   values: { owner, auth, repo, tag_name, target_commitish }
 } = parseArgs({ options, strict: true })
+
+if (!owner) {
+  throw new Error('owner is required')
+}
+
+if (!repo) {
+  throw new Error('repo is required')
+}
+
+if (!auth) {
+  throw new Error('auth is required')
+}
+
+if (!tag_name) {
+  throw new Error('tag_name is required')
+}
+
+console.log('Creating release', tag_name, 'for', owner, repo)
 
 const octokit = new Octokit({ auth })
 

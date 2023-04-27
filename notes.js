@@ -37,7 +37,7 @@ const options = {
   },
   tag_name: {
     type: 'string',
-    default: defaultVersion,
+    default: 'v' + defaultVersion,
     short: 't'
   },
   target_commitish: {

@@ -13,7 +13,13 @@ try {
   const pkg = JSON.parse(await readFile('package.json', 'utf8'))
   /* regexp to extract owner and repo from github url */
   const regexp = /github\.com\/([^/]+)\/([^/.]+)(\.git)?/
-  const [base, owner, repo] = regexp.exec(pkg.repository.url)
+  let url
+  if (pkg.repository?.url) {
+    url = pkg.repository.url
+  } else {
+    url = pkg.repository
+  }
+  const [base, owner, repo] = regexp.exec(url)
   defaultOwner = owner
   defaultRepo = repo
   defaultVersion = pkg.version

@@ -19,5 +19,8 @@
   "license": "MIT",
   "dependencies": {
     "@octokit/core": "^4.2.0"
+  },
+  "devDependencies": {
+    "standard": "^17.1.0"
   }
 }

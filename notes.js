@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { Octokit } from '@octokit/core'
-import { parseArgs } from 'node:util'
 import { readFile } from 'node:fs/promises'
+import { parseArgs } from 'node:util'
 
 /* eslint camelcase:off */
 
@@ -19,7 +19,7 @@ try {
   } else {
     url = pkg.repository
   }
-  const [base, owner, repo] = regexp.exec(url)
+  const [, owner, repo] = regexp.exec(url)
   defaultOwner = owner
   defaultRepo = repo
   defaultVersion = pkg.version
@@ -33,7 +33,7 @@ const options = {
   },
   auth: {
     type: 'string',
-      default: process.env.RELEASE_NOTES_TOKEN || process.env.GITHUB_TOKEN,
+    default: process.env.RELEASE_NOTES_TOKEN || process.env.GITHUB_TOKEN,
     short: 'a'
   },
   repo: {
@@ -51,6 +51,16 @@ const options = {
     short: 'c',
     default: 'main'
   },
+  draft: {
+    type: 'boolean',
+    short: 'd',
+    default: false
+  },
+  prerelease: {
+    type: 'boolean',
+    short: 'p',
+    default: false
+  },
   verbose: {
     type: 'boolean',
     short: 'v',
@@ -59,7 +69,7 @@ const options = {
 }
 
 const {
-  values: { owner, auth, repo, tag_name, target_commitish, verbose }
+  values: { owner, auth, repo, tag_name, target_commitish, draft, prerelease, verbose }
 } = parseArgs({ options, strict: true })
 
 if (!owner) {
@@ -110,8 +120,8 @@ const { data: { html_url } } = await octokit.request('POST /repos/{owner}/{repo}
   target_commitish,
   name,
   body,
-  draft: false,
-  prerelease: false,
+  draft,
+  prerelease,
   generate_release_notes: false,
   headers: {
     'X-GitHub-Api-Version': '2022-11-28'

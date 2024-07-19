@@ -2,6 +2,7 @@
 import { Octokit } from '@octokit/core'
 import { readFile } from 'node:fs/promises'
 import { parseArgs } from 'node:util'
+import { parse } from 'semver'
 
 /* eslint camelcase:off */
 
@@ -102,12 +103,17 @@ const { data: releases } = await octokit.request('GET /repos/{owner}/{repo}/rele
   }
 })
 
+const currentMajor = parse(tag_name.slice(1)).major
+const previousRelease = releases?.find(r => {
+  return !r.prerelease && !r.draft && parse(r.tag_name.slice(1)).major === currentMajor
+})
+
 const { data: { name, body } } = await octokit.request('POST /repos/{owner}/{repo}/releases/generate-notes', {
   owner,
   repo,
   tag_name,
   target_commitish,
-  previous_tag_name: releases[0]?.tag_name,
+  previous_tag_name: previousRelease?.tag_name,
   headers: {
     'X-GitHub-Api-Version': '2022-11-28'
   }

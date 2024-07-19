@@ -18,7 +18,8 @@
   "homepage": "https://github.com/mcollina/release-notes#readme",
   "license": "MIT",
   "dependencies": {
-    "@octokit/core": "^4.2.0"
+    "@octokit/core": "^4.2.0",
+    "semver": "^7.6.3"
   },
   "devDependencies": {
     "standard": "^17.1.0"

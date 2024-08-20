@@ -6,6 +6,14 @@ import { parse } from 'semver'
 
 /* eslint camelcase:off */
 
+function parseVersion(ref) {
+  if(ref.startsWith('v')) {
+    ref = ref.slice(1)
+  }
+
+  return parse(ref)
+}
+
 let defaultOwner = ''
 let defaultRepo = ''
 let defaultVersion = ''
@@ -103,9 +111,9 @@ const { data: releases } = await octokit.request('GET /repos/{owner}/{repo}/rele
   }
 })
 
-const currentMajor = parse(tag_name.slice(1)).major
+const currentMajor = parseVersion(tag_name).major
 const previousRelease = releases?.find(r => {
-  return !r.prerelease && !r.draft && parse(r.tag_name.slice(1)).major === currentMajor
+  return !r.prerelease && !r.draft && parseVersion(r.tag_name).major === currentMajor
 })
 
 const { data: { name, body } } = await octokit.request('POST /repos/{owner}/{repo}/releases/generate-notes', {

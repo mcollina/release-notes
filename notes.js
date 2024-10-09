@@ -84,7 +84,7 @@ const options = {
 
 const {
   values: { owner, auth, repo, tag_name, target_commitish, draft, prerelease, verbose, latest }
-} = parseArgs({ options, strict: true })
+} = parseArgs({ options, strict: true, allowNegative: true })
 
 if (!owner) {
   throw new Error('owner is required')

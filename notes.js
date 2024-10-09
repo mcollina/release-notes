@@ -74,7 +74,7 @@ const options = {
     type: 'boolean',
     short: 'v',
     default: false
-  }
+  },
   latest: {
     type: 'boolean',
     short: 'l',
@@ -142,7 +142,7 @@ const { data: { html_url } } = await octokit.request('POST /repos/{owner}/{repo}
   draft,
   prerelease,
   generate_release_notes: false,
-  make_latest: latest,
+  make_latest: '' + latest,
   headers: {
     'X-GitHub-Api-Version': '2022-11-28'
   }

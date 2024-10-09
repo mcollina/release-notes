@@ -75,10 +75,15 @@ const options = {
     short: 'v',
     default: false
   }
+  latest: {
+    type: 'boolean',
+    short: 'l',
+    default: true
+  }
 }
 
 const {
-  values: { owner, auth, repo, tag_name, target_commitish, draft, prerelease, verbose }
+  values: { owner, auth, repo, tag_name, target_commitish, draft, prerelease, verbose, latest }
 } = parseArgs({ options, strict: true })
 
 if (!owner) {
@@ -137,6 +142,7 @@ const { data: { html_url } } = await octokit.request('POST /repos/{owner}/{repo}
   draft,
   prerelease,
   generate_release_notes: false,
+  make_latest: latest,
   headers: {
     'X-GitHub-Api-Version': '2022-11-28'
   }

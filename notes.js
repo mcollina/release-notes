@@ -6,8 +6,8 @@ import { parse } from 'semver'
 
 /* eslint camelcase:off */
 
-function parseVersion(ref) {
-  if(ref.startsWith('v')) {
+function parseVersion (ref) {
+  if (ref.startsWith('v')) {
     ref = ref.slice(1)
   }
 
@@ -82,16 +82,23 @@ const options = {
   }
 }
 
-const {
+let {
   values: { owner, auth, repo, tag_name, target_commitish, draft, prerelease, verbose, latest }
 } = parseArgs({ options, strict: true, allowNegative: true })
 
-if (!owner) {
-  throw new Error('owner is required')
-}
-
 if (!repo) {
   throw new Error('repo is required')
+} else {
+  const slashIndex = repo.indexOf('/')
+
+  if (slashIndex !== -1) {
+    owner = repo.slice(0, slashIndex)
+    repo = repo.slice(slashIndex + 1)
+  }
+}
+
+if (!owner) {
+  throw new Error('owner is required')
 }
 
 if (!auth) {
